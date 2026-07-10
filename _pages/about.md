@@ -6,7 +6,7 @@ subtitle: Personal website and blog.
 
 profile:
   align: right
-  image: prof_pic.png
+  image: me.png
   image_circular: false # crops the image to make it circular
   more_info:
 

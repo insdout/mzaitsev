@@ -5,10 +5,42 @@ tmp_dir="$(mktemp -d)"
 tmp_override="${tmp_dir}/distill-override.yml"
 tmp_site="${tmp_dir}/site"
 
+# The starter ships no demo posts, so this test provides its own throwaway
+# distill fixture post (its front matter triggers the distillpub, mermaid,
+# tikzjax and giscus asset includes asserted below), then removes it on exit.
+distill_fixture="_posts/2021-05-22-distill.md"
+
 cleanup() {
   rm -rf "${tmp_dir}"
+  rm -f "${distill_fixture}"
 }
 trap cleanup EXIT
+
+cat >"${distill_fixture}" <<'MD'
+---
+layout: distill
+title: distill
+description: fixture post for the distill integration test
+date: 2021-05-22
+giscus_comments: true
+mermaid:
+  enabled: true
+tikzjax: true
+authors:
+  - name: Test Author
+    affiliations:
+      name: Test
+---
+
+## Section
+
+Distill integration fixture body.
+
+```mermaid
+graph TD;
+  A-->B;
+```
+MD
 
 cat >"${tmp_override}" <<'YAML'
 giscus:

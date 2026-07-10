@@ -5,10 +5,42 @@ tmp_dir="$(mktemp -d)"
 tmp_override="${tmp_dir}/comments-test-override.yml"
 tmp_site="${tmp_dir}/site"
 
+# The starter ships no demo posts, so this test provides its own throwaway
+# giscus/disqus fixture posts, builds, asserts, and removes them on exit.
+giscus_fixture="_posts/2022-12-10-giscus-comments.md"
+disqus_fixture="_posts/2015-10-20-disqus-comments.md"
+
 cleanup() {
   rm -rf "${tmp_dir}"
+  rm -f "${giscus_fixture}" "${disqus_fixture}"
 }
 trap cleanup EXIT
+
+cat >"${giscus_fixture}" <<'MD'
+---
+layout: post
+title: giscus comments fixture
+date: 2022-12-10 11:59:00-0400
+description: fixture post for the giscus comments integration test
+giscus_comments: true
+related_posts: false
+---
+
+Fixture post exercising giscus comments.
+MD
+
+cat >"${disqus_fixture}" <<'MD'
+---
+layout: post
+title: disqus comments fixture
+date: 2015-10-20 11:59:00-0400
+description: fixture post for the disqus comments integration test
+disqus_comments: true
+related_posts: false
+---
+
+Fixture post exercising disqus comments.
+MD
 
 cat >"${tmp_override}" <<'YAML'
 giscus:
